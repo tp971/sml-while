@@ -14,7 +14,7 @@ sml-while also supports some syntactic sugar:
     Inc i                   (* x_i++ *)
     Dec i                   (* x_i-- *)
     Call i f [a, b, ...] j  (* x_i := f(x_a, x_b, ...) *)
-    (* "Calling" executes statement f by shifting x_i to x_{i+j} *)
+    (* "Calling" executes statement f by shifting x_k to x_{k+j} for all k *)
 
 Example: This program calculates "x * y":
 
