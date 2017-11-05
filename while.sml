@@ -43,18 +43,18 @@ sig
     val For : int -> whilestmt -> whilestmt     (* For x_i do stmt od *)
 
     (* Execute stmt with x_i -> x_{i+j} *)
-    val Embed : int -> whilestmt -> whilestmt
+    val Embed : whilestmt -> int -> whilestmt
 
     (*
         Simulate function call:
-        Copy input from x_k ... x_{k+l} to x_j:
-            x_j := x_k; x_{j+1} := x_{k+1}; ...; x_{j+l} := x_{k+l}
+        Copy input parameters p_1, p_2, ..., p_n to x_j, x_{j+1}, ..., x_{j+n-1}
+            x_j := p_1; x_{j+1} := p_2; ...; x_{j+n-1} := p_n
         Call stmt:
             Embed j stmt
         Copy result from x_j to x_k:
             x_i := x_j
     *)
-    val Call : int -> int -> whilestmt -> int -> int -> whilestmt
+    val Call : int -> whilestmt -> int list -> int -> whilestmt
 end
 
 structure While :> WHILE =
@@ -132,13 +132,14 @@ struct
             For' (Get state i) f state
         end
 
-    fun Embed n e state =
+    fun Embed e n state =
         (List.take (state, n)) @ (e (List.drop (state, n)))
 
-    fun Call i j e k l =
-        (List.foldl op\\ Nop
-            (List.tabulate (l,
-                fn x => Assign (j + x) (k + x)))) \\
-        Embed j e \\
+    fun Call i e ps j =
+        (#1 (foldl
+            (fn (p, (a, k)) =>
+                (a \\ Assign (j + k) p, k + 1))
+            (Nop, 0) ps)) \\
+        Embed e j \\
         Assign i j
 end
