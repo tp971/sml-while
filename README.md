@@ -1,19 +1,20 @@
 Write and simulate WHILE programs in Standard ML. Basic statements are:
 
-    x_i := x_j + x_k
-    x_i := x_j - x_k
-    x_i := c
-    while x_i != 0 do stmt od
-    stmt_1 ; stmt_2
+    Add i j k               (* x_i := x_j + x_k *)
+    Sub i j k               (* x_i := x_j - x_k *)
+    Const i j               (* x_i := c *)
+    While i stmt            (* while x_i != 0 do stmt od *)
+    stmt_1 \\ stmt_2        (* stmt_1 ; stmt_2 *)
 
 sml-while also supports some syntactic sugar:
 
-    x_i := x_j
-    x_i := x_j + c
-    x_i := x_j - c
-    x_i++
-    x_i--
-    x_i := f(x_j, x_k, ...)
+    Assign i j              (* x_i := x_j *)
+    AddC i j c              (* x_i := x_j + c *)
+    SubC i j c              (* x_i := x_j - c *)
+    Inc i                   (* x_i++ *)
+    Dec i                   (* x_i-- *)
+    Call i f [a, b, ...] j  (* x_i := f(x_a, x_b, ...) *)
+    (* "Calling" executes statement f by shifting x_i to x_{i+j} *)
 
 Example: This program calculates "x * y":
 
